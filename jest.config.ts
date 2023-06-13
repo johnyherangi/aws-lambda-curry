@@ -1,11 +1,10 @@
-import { pathsToModuleNameMapper } from "ts-jest/utils"
+import { pathsToModuleNameMapper } from "ts-jest"
 import { compilerOptions } from "./tsconfig.paths.json"
 
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
  */
-
 export default {
     automock: false,
     clearMocks: true,
@@ -21,13 +20,6 @@ export default {
     transform: {
         ".(ts|tsx)": "ts-jest",
     },
-    globals: {
-        "ts-jest": {
-            compiler: "ttypescript",
-            tsconfig: "tsconfig.test.json",
-        },
-    },
-    setupFiles: ["<rootDir>jestSetup.ts"],
     roots: ["<rootDir>"],
     modulePaths: [compilerOptions.baseUrl],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),

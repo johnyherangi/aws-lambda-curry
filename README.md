@@ -1,4 +1,4 @@
-# node-cli-template
+# aws-lambda-curry
 
 ## Actions
 

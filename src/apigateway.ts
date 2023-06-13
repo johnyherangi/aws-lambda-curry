@@ -5,20 +5,6 @@ import { Transform, TransformHandler, transform } from "./transform"
 
 export function apigateway(
     middlewares?: Middleware<APIGatewayProxyEvent, APIGatewayProxyResult>[],
-): <TTransforms extends Transform<APIGatewayProxyEvent, any>[]>(
-    transforms: TTransforms,
-) => (
-    handler: TransformHandler<APIGatewayProxyEvent, APIGatewayProxyResult, TTransforms>,
-) => Handler<APIGatewayProxyEvent, APIGatewayProxyResult>
-
-export function apigateway(
-    middlewares?: Middleware<APIGatewayProxyEvent, APIGatewayProxyResult>[],
-): () => (
-    handler: Handler<APIGatewayProxyEvent, APIGatewayProxyResult>,
-) => Handler<APIGatewayProxyEvent, APIGatewayProxyResult>
-
-export function apigateway(
-    middlewares?: Middleware<APIGatewayProxyEvent, APIGatewayProxyResult>[],
 ) {
     function transformFn<TTransforms extends Transform<APIGatewayProxyEvent, any>[]>(
         transforms: TTransforms,

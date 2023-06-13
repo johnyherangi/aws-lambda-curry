@@ -29,8 +29,8 @@ jobs:
                   scope: "@johnyherangi"
             - name: Prepend scope to package name
               run: |
-                  sed -i 's|"name":.*|"name": '\"\@johnyherangi/node-cli-template\",'|g' "package.json"
-                  sed -i 's|"name":.*|"name": '\"\@johnyherangi/node-cli-template\",'|g' "package-lock.json"
+                  sed -i 's|"name":.*|"name": '\"\@johnyherangi/aws-lambda-curry\",'|g' "package.json"
+                  sed -i 's|"name":.*|"name": '\"\@johnyherangi/aws-lambda-curry\",'|g' "package-lock.json"
             - run: npm ci
             - run: echo "registry=https://npm.pkg.github.com/@johnyherangi" >> .npmrc
             - run: npm run build

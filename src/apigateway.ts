@@ -1,7 +1,21 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda"
 import { Handler } from "./handler"
 import { Middleware, middleware } from "./middleware"
 import { Transform, TransformHandler, transform } from "./transform"
+
+export function getEvent() {
+    return function <TEvent>(event: TEvent, _context: Context) {
+        return event
+    }
+}
+
+export function getContext() {
+    return function <TEvent>(_event: TEvent, context: Context) {
+        return context
+    }
+}
+
+const defaultTransforms = [getEvent(), getContext()] as const
 
 export function apigateway(
     middlewares?: Middleware<APIGatewayProxyEvent, APIGatewayProxyResult>[],
@@ -13,7 +27,11 @@ export function apigateway(
     ) => Handler<APIGatewayProxyEvent, APIGatewayProxyResult>
 
     function transformFn(): (
-        handler: Handler<APIGatewayProxyEvent, APIGatewayProxyResult>,
+        handler: TransformHandler<
+            APIGatewayProxyEvent,
+            APIGatewayProxyResult,
+            typeof defaultTransforms
+        >,
     ) => Handler<APIGatewayProxyEvent, APIGatewayProxyResult>
 
     function transformFn<TTransforms extends Transform<APIGatewayProxyEvent, any>[]>(

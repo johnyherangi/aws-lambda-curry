@@ -1,10 +1,24 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
-import { EventHandler, HttpMethod, Middleware, Route } from "./types"
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda"
+import { Handler } from "./handler"
+import { Middleware, middleware } from "./middleware"
+
+export type HttpMethod =
+    | "CONNECT"
+    | "DELETE"
+    | "GET"
+    | "HEAD"
+    | "OPTIONS"
+    | "PATCH"
+    | "POST"
+    | "PUT"
+    | "TRACE"
+
+export type Route<TEvent, TResult> = [string, string, Handler<TEvent, TResult>]
 
 export function httpRoute(httpMethod: HttpMethod) {
     return function path(path: string) {
         return function handler(
-            handler: EventHandler<APIGatewayProxyEvent, APIGatewayProxyResult>,
+            handler: Handler<APIGatewayProxyEvent, APIGatewayProxyResult>,
         ): Route<APIGatewayProxyEvent, APIGatewayProxyResult> {
             return [httpMethod, path, handler]
         }
@@ -12,10 +26,10 @@ export function httpRoute(httpMethod: HttpMethod) {
 }
 
 export function httpRoutes(routes: Route<APIGatewayProxyEvent, APIGatewayProxyResult>[]) {
-    return function middleware(
-        middleware?: Middleware<APIGatewayProxyEvent, APIGatewayProxyResult>[],
-    ): EventHandler<APIGatewayProxyEvent, APIGatewayProxyResult> {
-        return (event, context) => {
+    return function middlewareFn(
+        middlewares?: Middleware<APIGatewayProxyEvent, APIGatewayProxyResult>[],
+    ): Handler<APIGatewayProxyEvent, APIGatewayProxyResult> {
+        const routeHandler = (event: APIGatewayProxyEvent, context: Context) => {
             const match = routes.find((route) => {
                 const [httpMethod, path] = route
                 return event.httpMethod === httpMethod && event.path === path
@@ -28,18 +42,7 @@ export function httpRoutes(routes: Route<APIGatewayProxyEvent, APIGatewayProxyRe
             const [, , handler] = match
             return handler(event, context)
         }
+
+        return middleware(middlewares)(routeHandler)
     }
 }
-
-const handler: EventHandler<APIGatewayProxyEvent, APIGatewayProxyResult> = (e, c) => {
-    return {
-        statusCode: 200,
-        body: "",
-    }
-}
-
-const route1 = httpRoute("GET")("/example")(handler)
-
-const routeList = [route1]
-
-const routeHandler = httpRoutes(routeList)()

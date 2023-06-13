@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`apigateway.ts apigateway() creates apigateway handler 1`] = `
+{
+  "body": "/example",
+  "statusCode": 200,
+}
+`;

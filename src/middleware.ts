@@ -1,11 +1,17 @@
 import { Context } from "aws-lambda"
-import { EventHandler, Middleware } from "./types"
+import { Handler } from "./handler"
+
+export type Middleware<TEvent, TResult> = (
+    event: TEvent,
+    context: Context,
+    next: Handler<TEvent, TResult>,
+) => TResult | Promise<TResult>
 
 export function middleware<TEvent, TResult>(middlewares?: Middleware<TEvent, TResult>[]) {
     const invoke = (
         event: TEvent,
         context: Context,
-        handler: EventHandler<TEvent, TResult>,
+        handler: Handler<TEvent, TResult>,
         pipeline?: Middleware<TEvent, TResult>[],
     ): TResult | Promise<TResult> => {
         if (!pipeline) {
@@ -19,14 +25,14 @@ export function middleware<TEvent, TResult>(middlewares?: Middleware<TEvent, TRe
             return handler(event, context)
         }
 
-        const next: EventHandler<TEvent, TResult> = (e, c) => {
+        const next: Handler<TEvent, TResult> = (e, c) => {
             return invoke(e, c, handler, pipelineCopy)
         }
 
         return middleware(event, context, next)
     }
 
-    return (handler: EventHandler<TEvent, TResult>): EventHandler<TEvent, TResult> => {
+    return (handler: Handler<TEvent, TResult>): Handler<TEvent, TResult> => {
         return (e, c) => invoke(e, c, handler, middlewares)
     }
 }

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`route.ts httpRoutes() creates http route handler 1`] = `
+{
+  "body": "",
+  "statusCode": 200,
+}
+`;

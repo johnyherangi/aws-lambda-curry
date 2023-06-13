@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.paths.json",
+    "include": ["src", "__tests__", "jest.config.ts"],
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "experimentalDecorators": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "resolveJsonModule": true,
+        "noEmit": true
+    },
+    "ts-node": {
+        "require": ["tsconfig-paths/register"]
+    }
+}

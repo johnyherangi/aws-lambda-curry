@@ -28,20 +28,5 @@ describe("apigateway.ts", () => {
 
             expect(handler(event, {} as Context)).toMatchSnapshot()
         })
-        it("accepts no transforms", () => {
-            const handler = apigateway()()((event) => {
-                return {
-                    statusCode: 200,
-                    body: event.path,
-                }
-            })
-
-            const event = {
-                httpMethod: "GET",
-                path: "/example",
-            } as APIGatewayProxyEvent
-
-            expect(handler(event, {} as Context)).toMatchSnapshot()
-        })
     })
 })

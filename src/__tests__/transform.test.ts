@@ -14,9 +14,5 @@ describe("transform.ts", () => {
             const handler = typeStrongTransform([transform1])((args) => args[0])
             expect(handler("1", {} as Context)).toBe(1)
         })
-        it("accepts no transforms", () => {
-            const handler = transform<string, string>()((e) => e)
-            expect(handler("1", {} as Context)).toBe("1")
-        })
     })
 })

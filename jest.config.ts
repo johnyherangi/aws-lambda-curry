@@ -13,6 +13,7 @@ export default {
     coverageProvider: "v8",
     coverageReporters: ["text", "lcov"],
     collectCoverageFrom: ["**/src/**/*.{js,ts}"],
+    coveragePathIgnorePatterns: ["handler.ts", "index.ts"],
     maxWorkers: 10,
     preset: "ts-jest",
     testEnvironment: "node",

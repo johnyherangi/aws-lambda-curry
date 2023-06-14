@@ -11,11 +11,13 @@ export function apigateway(
         return function (
             handler: TransformHandler<APIGatewayProxyEvent, APIGatewayProxyResult, TTransforms>,
         ) {
-            return middleware(middlewares)(
-                transform<APIGatewayProxyEvent, APIGatewayProxyResult, TTransforms>(transforms)(
-                    handler,
-                ),
-            )
+            const transformHandler = transform<
+                APIGatewayProxyEvent,
+                APIGatewayProxyResult,
+                TTransforms
+            >(transforms)(handler)
+
+            return middleware(middlewares)(transformHandler)
         }
     }
 

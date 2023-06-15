@@ -20,12 +20,12 @@ jobs:
             - uses: actions/checkout@v2
             - id: branch_semver
               run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
-            - if: ${{ steps.current_version.outputs.value }} == ${{ steps.branch_semver.outputs.value }}
+            - if: ${{ steps.current_semver.outputs.value }} == ${{ steps.branch_semver.outputs.value }}
               run: |
-                  echo "${{ steps.current_version.outputs.value }} == ${{ steps.branch_semver.outputs.value }}"
+                  echo "${{ steps.current_semver.outputs.value }} == ${{ steps.branch_semver.outputs.value }}"
                   exit 1
             - run: |
-                  echo "${{ steps.current_version.outputs.value }} != ${{ steps.branch_semver.outputs.value }}"
+                  echo "${{ steps.current_semver.outputs.value }} != ${{ steps.branch_semver.outputs.value }}"
     build:
         runs-on: ubuntu-latest
         steps:

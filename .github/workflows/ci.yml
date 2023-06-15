@@ -12,20 +12,20 @@ jobs:
         steps:
             - uses: actions/checkout@v2
               with:
-                  ref: master
+                  ref: ${{ github.base_ref }}
                   fetch-depth: 0
             - uses: actions/setup-node@v2
-            - id: current_semver
+            - id: base_semver
               run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
             - uses: actions/checkout@v2
-            - id: branch_semver
+            - id: head_semver
               run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
-            - if: ${{ steps.current_semver.outputs.value }} == ${{ steps.branch_semver.outputs.value }}
+            - if: ${{ steps.base_semver.outputs.value }} == ${{ steps.head_semver.outputs.value }}
               run: |
-                  echo "Please bump package version."
+                  echo "Please bump package version: ${{ github.base_ref }}=${{ steps.base_semver.outputs.value }}, ${{ github.head_ref }}=${{ steps.head_semver.outputs.value }}"
                   exit 1
             - run: |
-                  echo "${{ steps.current_semver.outputs.value }} != ${{ steps.branch_semver.outputs.value }}"
+                  echo "${{ steps.base_semver.outputs.value }} != ${{ steps.head_semver.outputs.value }}"
     build:
         runs-on: ubuntu-latest
         steps:

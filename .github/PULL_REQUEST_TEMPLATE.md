@@ -4,8 +4,8 @@ https://github.com/johnyherangi/aws-lambda-curry/issues/
 
 # Changes
 
-> Describe changes here
+_Describe changes here_
 
 # Test
 
-> Add test steps here
+_Add test steps here_

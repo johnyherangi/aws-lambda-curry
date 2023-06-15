@@ -13,7 +13,7 @@ export type HttpMethod =
     | "PUT"
     | "TRACE"
 
-export type Route<TEvent, TResult> = [string, string, Handler<TEvent, TResult>]
+export type Route<TEvent, TResult> = [HttpMethod, string, Handler<TEvent, TResult>]
 
 export function httpRoute(httpMethod: HttpMethod) {
     return function path(path: string) {

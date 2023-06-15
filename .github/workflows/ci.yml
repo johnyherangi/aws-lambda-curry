@@ -8,6 +8,7 @@ on:
 
 jobs:
     semver:
+        if: github.head_ref != github.base_ref
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2

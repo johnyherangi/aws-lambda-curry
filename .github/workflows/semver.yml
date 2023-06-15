@@ -1,0 +1,29 @@
+name: semver
+
+on:
+    pull_request:
+        branches: master
+        paths:
+            - "src/**"
+            - "package.json"
+            - "package-lock.json"
+
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: master
+                  fetch-depth: 0
+            - uses: actions/setup-node@v2
+            - name: Get current semver
+              id: current_semver
+              run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+            - name: Get branch semver
+              id: branch_semver
+              run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
+            - run: exit 1
+              if: ${{ steps.current_version.outputs.value }} != ${{ steps.branch_semver.outputs.value }}

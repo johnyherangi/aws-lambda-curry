@@ -25,7 +25,7 @@ jobs:
                   echo "Please bump package version: ${{ github.base_ref }}=${{ steps.base_semver.outputs.value }}, ${{ github.head_ref }}=${{ steps.head_semver.outputs.value }}"
                   exit 1
             - run: |
-                  echo "${{ steps.base_semver.outputs.value }} != ${{ steps.head_semver.outputs.value }}"
+                  echo "${{ steps.base_semver.outputs.value }} != ${{ steps.head_semver.outputs.value }}" 👍
     build:
         runs-on: ubuntu-latest
         steps:

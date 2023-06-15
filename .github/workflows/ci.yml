@@ -3,12 +3,9 @@ name: ci
 on:
     pull_request:
         branches: master
-    push:
-        branches: master
 
 jobs:
     semver:
-        if: github.ref != 'master'
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2

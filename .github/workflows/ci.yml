@@ -22,7 +22,7 @@ jobs:
               run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
             - if: ${{ steps.current_semver.outputs.value }} == ${{ steps.branch_semver.outputs.value }}
               run: |
-                  echo "Please bump package version ${{ steps.branch_semver.outputs.value }}"
+                  echo "Please bump package version."
                   exit 1
             - run: |
                   echo "${{ steps.current_semver.outputs.value }} != ${{ steps.branch_semver.outputs.value }}"

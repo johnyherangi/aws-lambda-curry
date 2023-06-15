@@ -7,6 +7,25 @@ on:
         branches: master
 
 jobs:
+    semver:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: master
+                  fetch-depth: 0
+            - uses: actions/setup-node@v2
+            - id: current_semver
+              run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
+            - uses: actions/checkout@v2
+            - id: branch_semver
+              run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
+            - if: ${{ steps.current_version.outputs.value }} == ${{ steps.branch_semver.outputs.value }}
+              run: |
+                  echo "${{ steps.current_version.outputs.value }} == ${{ steps.branch_semver.outputs.value }}"
+                  exit 1
+            - run: |
+                  echo "${{ steps.current_version.outputs.value }} != ${{ steps.branch_semver.outputs.value }}"
     build:
         runs-on: ubuntu-latest
         steps:
@@ -25,8 +44,7 @@ jobs:
                   node-version: 18
             - run: npm ci
             - run: npm test
-            - name: Upload coverage reports to Codecov
-              uses: codecov/codecov-action@v3
+            - uses: codecov/codecov-action@v3
               env:
                   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     publish-dryrun-npm:

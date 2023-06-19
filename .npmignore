@@ -1,7 +1,0 @@
-__tests__
-coverage
-src
-.eslintrc.js
-.huskyrc.js
-.prettierrc.js
-jest.config.ts

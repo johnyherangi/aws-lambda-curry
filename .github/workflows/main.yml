@@ -1,0 +1,22 @@
+name: main
+
+on:
+    push:
+        branches: main
+        paths:
+            - "src/**"
+            - "package-lock.json"
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 18
+            - run: npm ci
+            - run: npm test
+            - uses: codecov/codecov-action@v3
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -1,0 +1,32 @@
+name: pr
+
+on:
+    pull_request:
+        branches: main
+        paths:
+            - "src/**"
+            - "package-lock.json"
+
+jobs:
+    semver:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.base_ref }}
+                  fetch-depth: 0
+            - uses: actions/setup-node@v2
+            - name: Get base ref package version
+              id: base_semver
+              run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
+            - uses: actions/checkout@v2
+            - name: Get head ref package version
+              id: head_semver
+              run: echo "::set-output name=value::$(node -e 'console.log(require("./package.json").version)')"
+            - name: Compare base and head ref package versions
+              if: steps.base_semver.outputs.value == steps.head_semver.outputs.value
+              run: |
+                  echo "Please bump package version: ${{ github.base_ref }}=${{ steps.base_semver.outputs.value }}, ${{ github.head_ref }}=${{ steps.head_semver.outputs.value }}"
+                  exit 1
+            - run: |
+                  echo "${{ steps.base_semver.outputs.value }} != ${{ steps.head_semver.outputs.value }}" 👍
